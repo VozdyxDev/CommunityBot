@@ -14,11 +14,9 @@ import net.dv8tion.jda.api.entities.channel.concrete.ThreadChannel;
 import net.dv8tion.jda.api.entities.channel.unions.MessageChannelUnion;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import org.jetbrains.annotations.NotNull;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -31,7 +29,7 @@ import static net.dv8tion.jda.api.interactions.commands.build.Commands.slash;
 import static net.dv8tion.jda.api.utils.FileUpload.fromData;
 
 public class Listener extends ListenerAdapter {
-    private static final ArrayList<SlashCommandData> rawCommands = new ArrayList<>();
+    private static final ArrayList<SlashCommandData> commandsData = new ArrayList<>();
     private static final ObjectMap<SlashCommandData, Cons<SlashCommandInteractionEvent>> commands = new ObjectMap<>();
 
     private static void register(SlashCommandData command, Cons<SlashCommandInteractionEvent> func) {
@@ -39,15 +37,14 @@ public class Listener extends ListenerAdapter {
     }
 
     private static void loadCommands(@NotNull Guild guild) {
-        commands.forEach(command -> rawCommands.add(command.key));
-        guild.updateCommands().addCommands(rawCommands).queue();
+        commands.forEach(command -> commandsData.add(command.key));
+        guild.updateCommands().addCommands(commandsData).queue();
     }
 
     public static void registerCommands() {
         register(
                 slash("map", "Отправить информацию о карте в эту публикацию")
-                        .addOption(OptionType.ATTACHMENT, "map", "Карта Mindustry", true)
-                        .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MANAGE_THREADS)),
+                        .addOption(OptionType.ATTACHMENT, "map", "Карта Mindustry", true),
                 event -> {
                     MessageChannelUnion channelUnion = event.getChannel();
                     if (!channelUnion.getType().equals(ChannelType.GUILD_PUBLIC_THREAD) || !channelUnion.asThreadChannel().getParentChannel().getId().equals(mapsChannel.getId())) {

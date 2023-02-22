@@ -4,6 +4,7 @@ import arc.func.Cons;
 import arc.graphics.Color;
 import arc.struct.ObjectMap;
 import arc.util.UnsafeRunnable;
+import arc.util.Strings;
 import net.darkdustry.bot.components.ContentHandler;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -79,8 +80,8 @@ public class Listener extends ListenerAdapter {
                                                 var image = ContentHandler.parseMapImage(map);
 
                                                 var embed = new EmbedBuilder()
-                                                        .setTitle(map.name())
-                                                        .setDescription(map.description())
+                                                        .setTitle(stripColors(map.name()))
+                                                        .setDescription(stripColors(map.description()))
                                                         .setFooter(map.width + "x" + map.height)
                                                         .setColor(accent.argb8888())
                                                         .setImage("attachment://image.png");
@@ -136,4 +137,9 @@ public class Listener extends ListenerAdapter {
             if (command.key.getName().equals(event.getName())) command.value.get(event);
         });
     }
+
+    public String stripColors(@NotNull String str) {
+        return Strings.stripColors(str);
+    }
+
 }

@@ -49,8 +49,6 @@ public class Listener extends ListenerAdapter {
                         .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MANAGE_THREADS)),
                 event -> {
                     MessageChannelUnion channelUnion = event.getChannel();
-                    System.out.println(channelUnion.getType().equals(ChannelType.GUILD_PUBLIC_THREAD));
-                    System.out.println(channelUnion.asThreadChannel().getParentChannel().getId().equals(mapsChannel.getId()));
                     if (!channelUnion.getType().equals(ChannelType.GUILD_PUBLIC_THREAD) || !channelUnion.asThreadChannel().getParentChannel().getId().equals(mapsChannel.getId())) {
                         reply(event, ":warning: Ошибка", "Эта команда доступна только в публикациях форума "+mapsChannel.getAsMention(), scarlet);
                         return;

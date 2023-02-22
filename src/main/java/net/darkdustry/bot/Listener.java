@@ -96,6 +96,8 @@ public class Listener extends ListenerAdapter {
                                             t -> {
                                                 if (t instanceof ZipException) {
                                                     reply(event, ":warning: Ошибка", "Файл повреждён", scarlet);
+                                                } else {
+                                                    reply(event, ":warning: Ошибка", Strings.getSimpleMessage(t), scarlet);
                                                 }
                                             }
                                     )

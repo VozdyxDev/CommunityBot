@@ -20,8 +20,6 @@ import java.io.IOException;
 
 import static arc.util.io.Streams.emptyBytes;
 import static java.awt.image.BufferedImage.TYPE_INT_ARGB;
-import static net.darkdustry.bot.Vars.currentImage;
-import static net.darkdustry.bot.Vars.currentGraphics;
 import static net.darkdustry.bot.Vars.emojiGuild;
 
 public class ContentHandler {
@@ -47,9 +45,6 @@ public class ContentHandler {
     public static byte[] parseSchematicImage(Schematic schematic) {
         var image = new BufferedImage(schematic.width * 32 + 64, schematic.height * 32 + 64, TYPE_INT_ARGB);
         var plans = schematic.tiles.map(stile -> new BuildPlan(stile.x + 1, stile.y + 1, stile.rotation, stile.block, stile.config));
-
-        currentImage = image;
-        currentGraphics = image.createGraphics();
 
         Draw.reset();
 

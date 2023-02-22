@@ -10,9 +10,6 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.darkdustry.bot.components.ConfigUtils.Config;
 import net.dv8tion.jda.api.entities.channel.concrete.ForumChannel;
 
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-
 public class Vars {
     public static final Json json = new Json();
     public static final CommandHandler handler = new CommandHandler("");
@@ -29,8 +26,4 @@ public class Vars {
     public static JDA jda;
     public static ForumChannel mapsChannel, schematicsChannel;
     public static Guild guild, emojiGuild;
-
-    public static BufferedImage currentImage;
-    public static Graphics2D currentGraphics;
-
 }

@@ -95,7 +95,6 @@ public class ResourceUtils {
         data.getRegions().each(region -> atlas.addRegion(region.name, new ImageRegion(region, images.get(region.page))));
 
         atlas.setErrorRegion("error");
-        batch = new SchematicBatch();
 
         info("Loaded @ pages, @ regions.", data.getPages().size, data.getRegions().size);
     }

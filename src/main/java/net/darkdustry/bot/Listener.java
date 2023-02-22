@@ -138,7 +138,7 @@ public class Listener extends ListenerAdapter {
         });
     }
 
-    public String stripColors(@NotNull String str) {
+    public static String stripColors(@NotNull String str) {
         return Strings.stripColors(str);
     }
 

@@ -1,4 +1,4 @@
-package tk.darkdustry.bot.components;
+package net.darkdustry.bot.components;
 
 import arc.files.Fi;
 import arc.graphics.Pixmap;
@@ -14,14 +14,24 @@ import mindustry.maps.Map;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 
 import static arc.util.io.Streams.emptyBytes;
 import static java.awt.image.BufferedImage.TYPE_INT_ARGB;
-import static tk.darkdustry.bot.Vars.*;
+import static net.darkdustry.bot.Vars.currentImage;
+import static net.darkdustry.bot.Vars.currentGraphics;
+import static net.darkdustry.bot.Vars.emojiGuild;
 
 public class ContentHandler {
 
+    public static String getRequirements(Schematic schematic) {
+        var builder = new StringBuilder();
+        schematic.requirements().each((item, amount) -> builder.append(emojiGuild.getEmojisByName(item.localizedName, true).get(0).getAsMention()).append(amount).append(" "));
+        return builder.toString();
+    }
+    
     public static Map parseMap(File file) throws IOException {
         return MapIO.createMap(new Fi(file), true);
     }

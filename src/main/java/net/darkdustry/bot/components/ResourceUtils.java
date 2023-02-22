@@ -1,4 +1,4 @@
-package tk.darkdustry.bot.components;
+package net.darkdustry.bot.components;
 
 import arc.files.ZipFi;
 import arc.graphics.Pixmap;
@@ -7,21 +7,28 @@ import arc.graphics.g2d.TextureAtlas;
 import arc.graphics.g2d.TextureAtlas.TextureAtlasData;
 import arc.graphics.g2d.TextureAtlas.TextureAtlasData.AtlasPage;
 import arc.struct.ObjectMap;
-import arc.util.*;
-import mindustry.core.*;
+import arc.util.Http;
+import arc.util.Log;
+import arc.util.Time;
+import arc.util.UnsafeRunnable;
+import mindustry.core.ContentLoader;
+import mindustry.core.GameState;
+import mindustry.core.World;
 import mindustry.world.Tile;
+import net.darkdustry.bot.Vars;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 
-import static arc.Core.*;
+import static arc.Core.atlas;
+import static arc.Core.batch;
 import static arc.graphics.g2d.Draw.scl;
 import static arc.graphics.g2d.Lines.useLegacyLine;
 import static arc.util.Log.info;
 import static arc.util.serialization.Jval.read;
-import static mindustry.Vars.*;
-import static mindustry.content.Items.*;
-import static tk.darkdustry.bot.Vars.*;
+import static mindustry.Vars.content;
+import static mindustry.Vars.state;
+import static mindustry.Vars.world;
 
 public class ResourceUtils {
 
@@ -38,7 +45,6 @@ public class ResourceUtils {
         loadIgnoreErrors(content::load);
 
         loadBlockColors();
-        loadItemEmojis();
 
         world = new World() {
             public Tile tile(int x, int y) {
@@ -51,7 +57,7 @@ public class ResourceUtils {
     }
 
     private static void downloadResources() {
-        var mindustry = resources.child("Mindustry.jar");
+        var mindustry = Vars.resources.child("Mindustry.jar");
         if (mindustry.exists()) return;
 
         Http.get("https://api.github.com/repos/Anuken/Mindustry/releases/81624846").timeout(0).block(release -> {
@@ -65,18 +71,18 @@ public class ResourceUtils {
                 info("Mindustry.jar downloaded in @ms.", Time.elapsed());
 
                 new ZipFi(mindustry).child("sprites").walk(fi -> {
-                    info("Copying @ into @...", fi.name(), sprites.path());
-                    if (fi.isDirectory()) fi.copyFilesTo(sprites);
-                    else fi.copyTo(sprites);
+                    info("Copying @ into @...", fi.name(), Vars.sprites.path());
+                    if (fi.isDirectory()) fi.copyFilesTo(Vars.sprites);
+                    else fi.copyTo(Vars.sprites);
                 });
 
-                info("Unpacked @ files.", sprites.list().length);
+                Log.info("Unpacked @ files.", Vars.sprites.list().length);
             });
         });
     }
 
     private static void loadTextureDatas() {
-        var data = new TextureAtlasData(sprites.child("sprites.aatls"), sprites, false);
+        var data = new TextureAtlasData(Vars.sprites.child("sprites.aatls"), Vars.sprites, false);
         var images = new ObjectMap<AtlasPage, BufferedImage>();
 
         atlas = new TextureAtlas();
@@ -95,7 +101,7 @@ public class ResourceUtils {
     }
 
     private static void loadBlockColors() {
-        var pixmap = new Pixmap(sprites.child("block_colors.png"));
+        var pixmap = new Pixmap(Vars.sprites.child("block_colors.png"));
         for (int i = 0; i < pixmap.width; i++) {
             var block = content.block(i);
             if (block.itemDrop != null) block.mapColor.set(block.itemDrop.color);
@@ -104,31 +110,6 @@ public class ResourceUtils {
         pixmap.dispose();
 
         info("Loaded @ block colors.", pixmap.width);
-    }
-
-    private static void loadItemEmojis() {
-        emojis.putAll(
-                scrap, 770045449750577192L,
-                copper, 770045449603645492L,
-                lead, 770045449846521856L,
-                graphite, 770045449729343488L,
-                coal, 770045449582411817L,
-                titanium, 770045449822142554L,
-                thorium, 770045449612558366L,
-                silicon, 770045449696182302L,
-                plastanium, 801022400211976243L,
-                phaseFabric, 770045449326821413L,
-                surgeAlloy, 770045449700507668L,
-                sporePod, 770045449692250123L,
-                sand, 770045449758441502L,
-                blastCompound, 770045449654108211L,
-                pyratite, 770045449335209985L,
-                metaglass, 770045449834463242L,
-                beryllium, 972298068097662987L,
-                tungsten, 962490016506994708L,
-                oxide, 973958882563063891L,
-                carbide, 973958957909573673L
-        );
     }
 
     private static void loadIgnoreErrors(UnsafeRunnable runnable) {

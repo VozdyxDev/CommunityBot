@@ -1,4 +1,4 @@
-package tk.darkdustry.bot.components;
+package net.darkdustry.bot.components;
 
 import arc.graphics.Texture;
 import arc.graphics.g2d.SpriteBatch;
@@ -6,12 +6,12 @@ import arc.graphics.g2d.TextureAtlas.AtlasRegion;
 import arc.graphics.g2d.TextureRegion;
 import arc.math.Mathf;
 import arc.util.Tmp;
+import net.darkdustry.bot.Vars;
 
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
 import static arc.graphics.Color.white;
-import static tk.darkdustry.bot.Vars.*;
 
 public class SchematicBatch extends SpriteBatch {
 
@@ -27,11 +27,11 @@ public class SchematicBatch extends SpriteBatch {
         y *= 4;
 
         var transform = new AffineTransform();
-        transform.translate(x, currentImage.getHeight() - height * 4f - y);
+        transform.translate(x, Vars.currentImage.getHeight() - height * 4f - y);
         transform.rotate(-rotation * Mathf.degRad, originX * 4, originY * 4);
 
-        currentGraphics.setTransform(transform);
-        currentGraphics.drawImage(recolorImage(regions.get(((AtlasRegion) region).name)), 0, 0, (int) width * 4, (int) height * 4, null);
+        Vars.currentGraphics.setTransform(transform);
+        Vars.currentGraphics.drawImage(recolorImage(Vars.regions.get(((AtlasRegion) region).name)), 0, 0, (int) width * 4, (int) height * 4, null);
     }
 
     @Override
